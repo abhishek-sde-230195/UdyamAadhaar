@@ -50,10 +50,6 @@ const useStyles = makeStyles((theme) => ({
     const {isNavOpen, firstName, lastName, isUserLoggedIn} = navbar; 
     const initials = (firstName?.length > 0 ? firstName[0] : '') + (lastName?.length > 0 ? lastName[0] : '');
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   
   const handleDrawerOpen = () => {
       if(isUserLoggedIn)
@@ -67,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   const menuHtml = isUserLoggedIn ? (
     <li>
     <a className="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <Fab color="default" onClick={handleClick}>
+      <Fab color="default" >
         {initials||'SP'}
       </Fab>
     </a>
@@ -110,9 +106,9 @@ const useStyles = makeStyles((theme) => ({
         </NavLink>
         
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
+          <MenuIcon  />
         </button>
-
+      
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
            

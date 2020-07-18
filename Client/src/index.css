@@ -287,3 +287,6 @@ body{
 .no-padding{
   padding:0!important
 }
+.navbar-toggler{
+  border-color: transparent;
+}
