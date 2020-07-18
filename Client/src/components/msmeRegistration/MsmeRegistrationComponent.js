@@ -1,37 +1,88 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useStyles} from '../layout/Style';
 import {Stepper, Step, StepLabel, StepContent, Button, Paper, Typography, Card, Grid } from '@material-ui/core';
 import ApplicantDetailsComponent from './ApplicantDetailsComponent';
 import OrganisationDetailsComponent from './OrganisationDetailsComponent';
 import BankDetailsComponent from './BankDetailsComponent';
+import axios from 'axios';
+import toast from '../../axios.interceptor';
 
 const MsmeRegistrationComponent = () => {
     const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-
+    const [activeStep, setActiveStep] = useState(0);
+    const [udhyamAadharDetails, setUdhyamAadharDetails] = useState({});
     const getSteps = () => {
         return ['Applicant Details', 'Organisation Details', 'Bank Details'];
-      }
-      
+    }
+    const aadharConstant = {
+        applicant : 1,
+        organisation : 2,
+        bank: 3
+    };
     const steps = getSteps();
     const getStepContent = (step) => {
         switch (step) {
             case 0:
             return (
-                <ApplicantDetailsComponent activeStep={activeStep} handleBack={handleBack} handleNext={handleNext} maxLength={steps.length} />
+                <ApplicantDetailsComponent activeStep={activeStep} handleBack={handleBack}  
+                    handleNext={handleNext} maxLength={steps.length} />
             );
             case 1:
-            return (<OrganisationDetailsComponent activeStep={activeStep} handleBack={handleBack} handleNext={handleNext} maxLength={steps.length} />);
+            return (
+                <OrganisationDetailsComponent activeStep={activeStep} handleBack={handleBack} 
+                    handleNext={handleNext} maxLength={steps.length} />);
             case 2:
-            return ( <BankDetailsComponent activeStep={activeStep} handleBack={handleBack} handleNext={handleNext} maxLength={steps.length} /> );
+            return ( 
+                <BankDetailsComponent activeStep={activeStep} handleBack={handleBack} 
+                    handleNext={handleNext} maxLength={steps.length} /> );
             default:
             return 'Unknown step';
         }
     }
+
+    const saveFormData = (data) => {
+        console.log(JSON.stringify(data));
+        axios.post('auth/Register/', {
+            data
+        })
+        .then(() => {
+            toast.success("Your data is successfully saved");
+        })
+    };
   
-    const handleNext = () => {
-        console.log(activeStep)
-      setActiveStep(activeStep+ 1);
+    const handleNext = (data, pageNumber) => {
+        switch(pageNumber){
+            case aadharConstant.applicant: 
+                setUdhyamAadharDetails({
+                    ...udhyamAadharDetails,
+                    applicantDetails: data
+                });
+                setActiveStep(activeStep+ 1);
+                break;
+            case aadharConstant.organisation:
+                setUdhyamAadharDetails({
+                    ...udhyamAadharDetails,
+                    organisationDetails: data
+                });
+                setActiveStep(activeStep+ 1);
+                break;
+             case aadharConstant.bank: 
+                setUdhyamAadharDetails({
+                    ...udhyamAadharDetails,
+                    bankDetails: data
+                });
+                setActiveStep(activeStep+ 1);
+                data = {...udhyamAadharDetails, bankDetails: data};
+                saveFormData(data);
+                break;   
+            default:
+                break;
+        }
+    };
+
+    const handleSubmit = (data) => {
+        setActiveStep(activeStep+ 1);
+        console.log("form  details",udhyamAadharDetails);
     };
   
     const handleBack = () => {

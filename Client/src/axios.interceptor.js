@@ -23,7 +23,7 @@ function showValidationErrorMessages(response){
         let count = 0;
         keys.forEach(key => {
             count=0;
-            let message = errors[key].map(error => {
+            let message = typeof(errors[key]) === 'string'? errors[key] :  errors[key].map(error => {
                 count++;
                 return (
                     <div>
@@ -32,9 +32,10 @@ function showValidationErrorMessages(response){
                     </div>
                 )
             })
+            let header = typeof(errors[key]) === 'string' ? '' : ` Validation for ${key} : `
             toast.error(
                 <div>
-                    Validation for {key} : 
+                    {header}
                     <br /> 
                     {message}
                 </div>

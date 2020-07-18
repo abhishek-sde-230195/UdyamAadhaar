@@ -26,6 +26,7 @@ namespace BusinessLogic.Constants
             public const string JwtKey = "AuthSettings:Key";
             public const string JwtAudience = "AuthSettings:Audience";
             public const string JwtIssuer = "AuthSettings:Issuer";
+            public const string DefaultPassword = "Password:IniitalPassword";
             public const bool RequireDigit = true;
             public const int RequiredLength = 5;
         }

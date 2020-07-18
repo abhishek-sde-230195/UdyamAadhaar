@@ -9,7 +9,7 @@ const BankDetailsComponent = (props) => {
         bankIfscCode: ''
     })
     
-    const {activeStep,  handleBack, handleNext, maxLength} = props
+    const {activeStep,  handleBack, maxLength, handleNext} = props
     console.log(maxLength)
     const classes = useStyles();
 
@@ -22,8 +22,7 @@ const BankDetailsComponent = (props) => {
     const handleSubmit= (e) => {
         e.preventDefault();
         console.log(bankDetails);
-        handleNext();
-
+        handleNext(bankDetails, 3);
     }
 
     return (

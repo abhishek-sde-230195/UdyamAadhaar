@@ -17,7 +17,7 @@ namespace BusinessLogic.Constants
                 public const string Email = "Email";
             }
             public const string RegistrationLink = "?userId={0}&token={1}";
-            public const string RegistrationMailSubject = "Activate your account Fixed Ratio account";
+            public const string RegistrationMailSubject = "Activate your account Udhyam Aadhar account";
             public const string RegistrationMailTemplate = "<p>New account have been created at {0}. kindly use the below link to activate your account <br /> <br> <a href='{1}'> Verify account </a></p>";
             public const string UserCreated = "User Created successfully";
             public const string UserNotCreated = "Failed to create user";

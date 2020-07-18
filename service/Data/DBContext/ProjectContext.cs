@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Data.DBTables;
+using Data.HelperMethods;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ namespace Data.DBContext
         {
             base.OnModelCreating(modelBuilder);
             var allEntities = modelBuilder.Model.GetEntityTypes();
-
+            modelBuilder.NamesToSnakeCase();//Only for Postgresql
             foreach (var entity in allEntities)
             {
                 entity.AddProperty("CreatedDate", typeof(DateTime));

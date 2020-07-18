@@ -35,7 +35,7 @@ const OrganisationDetailsComponent = (props) => {
     const handleSubmit= (e) => {
         e.preventDefault();
         console.log(organisationDetails);
-        handleNext();
+        handleNext(organisationDetails, 2);
 
     }
 

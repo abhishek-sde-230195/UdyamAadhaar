@@ -16,6 +16,5 @@ namespace BusinessLogic.Service
                 IsSuccess = true
             };
         }
-
     }
 }

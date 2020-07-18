@@ -7,12 +7,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavbarContextProvider from './context/NavbarContext';
 import {BrowserRouter} from 'react-router-dom';
 import {LinearProgress} from '@material-ui/core';
+import { stringFormatter } from './helperMethods/CommonMethods';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
 }));
+
+stringFormatter();
 
 function App() {
   const classes = useStyles();

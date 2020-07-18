@@ -38,7 +38,7 @@ namespace BusinessLogic.Service
                     mail.Body = bodyText;
                     mail.IsBodyHtml = true;
 
-                    using (SmtpClient smtp = new SmtpClient(ConfigurationConstant.Mail.SmtpHost, ConfigurationConstant.Mail.SmtpPort))
+                    using (SmtpClient smtp = new SmtpClient(_configuration[ConfigurationConstant.Mail.SmtpHost], ConfigurationConstant.Mail.SmtpPort))
                     {
                         smtp.Credentials = new NetworkCredential(senderEmail, fromPassword);
                         smtp.EnableSsl = true;
