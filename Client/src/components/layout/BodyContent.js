@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {useLocation} from 'react-router-dom';
 import RouteHelper from '../../helperMethods/RouteHelper';
-
+import { fullBackgroundLinks } from '../../constants/RouteConstants';
 
 const useStyles = makeStyles((theme) => ({
     drawerHeader: {
@@ -30,7 +30,7 @@ const BodyContent = (props) => {
         </div>
     )
     let location = useLocation();
-    const domHtml = (location.pathname === '/signin' || location.pathname ==='/signup')? (
+    const domHtml = (fullBackgroundLinks.includes(location.pathname.toLocaleLowerCase()))? (
         <div className="container-fluid no-padding">
             {dom}
         </div>

@@ -47,11 +47,8 @@ const useStyles = makeStyles((theme) => ({
   const HorizontalNavbar = () => {
     const classes = useStyles();
     const {navbar, toggleNavbar, logoutUser} = useContext(NavbarContext);
-    const {isNavOpen, userName, isUserLoggedIn} = navbar; 
-    const [, setAnchorEl] = useState(null);
-    const initials = userName.split(" ").map((item) => {
-      return item[0];
-  });
+    const {isNavOpen, firstName, lastName, isUserLoggedIn} = navbar; 
+    const initials = (firstName?.length > 0 ? firstName[0] : '') + (lastName?.length > 0 ? lastName[0] : '');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

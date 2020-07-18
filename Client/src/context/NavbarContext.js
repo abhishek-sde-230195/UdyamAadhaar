@@ -11,7 +11,8 @@ const NavbarContextProvider = (props) =>{
             localData = localData ? JSON.parse(localData) : {
                 isNavOpen: false,
                 isUserLoggedIn: false,
-                userName: ''
+                firstName: '',
+                lastName: ''
             };
             localData.isUserLoggedIn = getCookie(AxiosConstant.token)?true: false;
             return localData;
@@ -28,11 +29,12 @@ const NavbarContextProvider = (props) =>{
         });
     }
 
-    const setUserLogIn = (isLogin, userName) => {
+    const setUserLogIn = (isLogin, firstName, lastName) => {
         setNavbar({
             ...navbar,
             isUserLoggedIn: isLogin,
-            userName: userName
+            firstName: firstName,
+            lastName: lastName
         });
     }
 
@@ -41,10 +43,11 @@ const NavbarContextProvider = (props) =>{
         setNavbar({
             ...navbar,
             isUserLoggedIn: false,
-            userName: ''
+            firstName: '',
+            lastName: ''
         });
         console.log('cookie deleted');
-        toast.success(`${navbar.userName}, you are successfully logged out. We are looking back to host you!!!!}`);
+        toast.success(`${navbar.firstName} ${navbar.lastName}, you are successfully logged out. We are looking back to host you!!!!}`);
     }
 
      return ( 
