@@ -173,7 +173,7 @@ namespace BusinessLogic.Service
             var encodeToken = Encoding.UTF8.GetBytes(token);
             var validEmailToken = WebEncoders.Base64UrlEncode(encodeToken);
 
-            confirmationLink += string.Format(MessageConstant.User.ConfirmationLink, email, token);
+            confirmationLink += string.Format(MessageConstant.User.ConfirmationLink, email, validEmailToken);
             string message = string.Format(MessageConstant.User.ResetPasswordTemplate, confirmationLink);
             var isMailSent = await _mailService.SendMailAsync(email, message, MessageConstant.User.PasswordResetSubject);
             response.Message = MessageConstant.User.PasswordLinkSend;
@@ -200,11 +200,10 @@ namespace BusinessLogic.Service
             if (result.Succeeded)
             {
                 response.Message = MessageConstant.User.PasswordChanged;
-
                 return response;
             }
             response.Message = MessageConstant.User.PasswordChangedFailed;
-            response.IsSuccess = true;
+            response.IsSuccess = false;
             return response;
         }
     }
