@@ -1,51 +1,18 @@
 import React,  { useState, useContext} from "react";
 import {TextField, Grid, Button, Typography, Avatar, CssBaseline, FormControlLabel, InputLabel,
-     Paper, Box, InputAdornment, IconButton, OutlinedInput, FormControl } from '@material-ui/core';
+    Paper, Box, InputAdornment, IconButton, OutlinedInput, FormControl } from '@material-ui/core';
 import {LockOutlined, VisibilityOff, Visibility} from '@material-ui/icons';
+import clsx from 'clsx';
 import axios from 'axios';
+import Theater from  '../../media/images/theater1.jpg';
+import {isTablet, isMobile, BrowserView, MobileOnlyView, TabletView} from 'react-device-detect';
 import {Link} from 'react-router-dom';
-import  {AxiosConstant} from '../../constants/AxiosConstants';
-import {setCookie} from '../../helperMethods/CookieHelper';
-import { makeStyles } from '@material-ui/core/styles';
-import {NavbarContext} from '../../context/NavbarContext';
-import toast from '../../axios.interceptor';
+import  toast from "../../axios.interceptor";
+import { LoginStyle as useStyles } from '../layout/Style';
 import Copyright from '../layout/CopyRight';
- 
-
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-      height: '100vh',
-    },
-    image: {
-      backgroundRepeat: 'no-repeat',
-      backgroundColor:
-        theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    },
-    margin:{
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(1)
-    },
-    paper: {
-      margin: theme.spacing(8, 4),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));
+import { NavbarContext } from "../../context/NavbarContext";
+import  {authRoute, dashboardRoute} from '../../constants/RouteConstants';
+import  {authMessages} from '../../constants/MessagesConstant';
 
 const SignUp = (props) => {
     const [signup, setSignUp] = useState({
@@ -60,7 +27,7 @@ const SignUp = (props) => {
     const {navbar} = useContext(NavbarContext);
 
     if(navbar.isUserLoggedIn){
-        props.history.push('/');
+        props.history.push(dashboardRoute);
     }
 
     const classes = useStyles();
@@ -78,21 +45,21 @@ const SignUp = (props) => {
     };  
 
     const handleSubmit = (event) => {
-        console.log(signup)
         event.preventDefault();
-        axios.post('auth/Register/', {
+        axios.post(authRoute.signup, {
             Email: signup.email,
             Password: signup.password,
             ConfirmPassword:signup.confirmPassword,
-            FullName: signup.fullName
+            FirstName: signup.firstName,
+            LastName: signup.lastName
         })
         .then(() => {
-            toast.success("Successfully registered, Please verify your Email Id");
-            props.history.push('/verifyaccount');
+            toast.success(authMessages.signup.success);
+            props.history.push(authRoute.verifyAccount);
         })
     }
 
-    return ( 
+   return ( 
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
             <Grid item xs={false} sm={4} md={7} className={'img-login ' + classes.image} />
@@ -107,16 +74,16 @@ const SignUp = (props) => {
                     <form onSubmit={handleSubmit} className={classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <TextField variant="outlined" onChange={handleChange} margin="normal" required fullWidth id="firstName" 
-                                label="First Name" autoFocus placeholder="Please enter your first name" />
+                                <TextField variant="outlined" autoFocus onChange={handleChange} margin="normal" required fullWidth id="firstName" 
+                                label="First Name" placeholder="Please enter your first name" />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField variant="outlined" onChange={handleChange} margin="normal" required fullWidth id="lastName" label="Last Name" 
-                                autoFocus placeholder="Please enter your last name"/>
+                                 placeholder="Please enter your last name"/>
                             </Grid>
                         </Grid>
                         <TextField variant="outlined" onChange={handleChange} margin="normal" required fullWidth id="email" label="Email Address" 
-                        autoComplete="email" autoFocus placeholder="Please enter your email address"/>
+                            autoComplete="email" placeholder="Please enter your email address"/>
                         <FormControl fullWidth className={classes.margin} variant="outlined">
                             <InputLabel htmlFor="password" required>Password</InputLabel>
                             <OutlinedInput variant="outlined" onChange={handleChange} required fullWidth name="password" label="Password"
@@ -136,7 +103,11 @@ const SignUp = (props) => {
                             Sign Up
                         </Button>
                         <Grid container>
-                            <Grid item xs></Grid>
+                            <Grid item xs>
+                                <Link to="/forgotpassword" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
                             <Grid item>
                                 <Link to="/signin" variant="body2">
                                     {"Already have an account? Sign in"}

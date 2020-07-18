@@ -6,6 +6,8 @@ import VerifyAccount from '../components/auth/VerifyAccount';
 import NotFound from '../components/layout/NotFound';
 import SpreadSheetComponent from '../components/grid/SpreadSheetComponent';
 import MsmeRegistrationComponent from '../components/msmeRegistration/MsmeRegistrationComponent';
+import ForgotPassword from '../components/auth/ForgotPassword';
+import ResetPassword from '../components/auth/ResetPassword';
 
 const RouteHelper = () => {
     return ( 
@@ -15,6 +17,8 @@ const RouteHelper = () => {
             <Route exact path='/signup' component={SignUp} />
             <Route exact path='/verifyaccount' component={VerifyAccount}  />
             <Route exact path='/data/sheet' component={SpreadSheetComponent} />
+            <Route exact path='/forgotpassword' component={ForgotPassword} />
+            <Route exact path="/ResetPassword" component={ResetPassword} />
             <Route component={NotFound} />
         </Switch>
      );

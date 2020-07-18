@@ -1,5 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {Grid, Button } from '@material-ui/core';
+import {Grid, Button, CssBaseline, Paper, Avatar, Typography } from '@material-ui/core';
+import {PanoramaSharp} from '@material-ui/icons';
 import {Link} from 'react-router-dom';
 import queryString from 'query-string';
 import axios from 'axios';
@@ -7,44 +8,59 @@ import  {AxiosConstant} from '../../constants/AxiosConstants';
 import {setCookie} from '../../helperMethods/CookieHelper';
 import { NavbarContext } from '../../context/NavbarContext';
 import  toast from "../../axios.interceptor";
+import  {authRoute, dashboardRoute} from '../../constants/RouteConstants';
+import  {authMessages} from '../../constants/MessagesConstant';
+import { LoginStyle as useStyles } from '../layout/Style';
 
 const VerifyAccount = (props) => {
-    const [message, setMessage] = useState('Please verify your account and then  ');
+    
+    const classes = useStyles();
+    const [message, setMessage] = useState(authMessages.verify.verificationMessage);
+    const {navbar} = useContext(NavbarContext);
+
+    if(navbar.isUserLoggedIn){
+        props.history.push(dashboardRoute);
+    }
     const {setUserLogIn} = useContext(NavbarContext);
     const {userId, token} = queryString.parse(props.location.search);
 
     useEffect(() => {
         if(userId){
-            setMessage("Verifying your account. Please wait");
-            let url = `auth/ConfirmEmail?userId=${userId}&token=${encodeURIComponent(token)}`;
+            setMessage(authMessages.verify.verifying);
+            let url = authRoute.verificationLink.format(userId, encodeURIComponent(token));
             axios.get(url)
                 .then(res => {
-                    toast.success("Congratulation, your account is now verified.");
-                    setMessage("Account Verified!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    setCookie(AxiosConstant.token,res.data?.data?.token, res.data.data.expireDate) 
-                    setUserLogIn(true, res.data?.data?.fullName);
-                    props.history.push('/');
+                    toast.success(authMessages.verify.verified);
+                    setMessage(authMessages.verify.verified);
+                    let data = res.data?.data;
+                    setCookie(AxiosConstant.token, data?.token,  data?.expireDate) 
+                    setUserLogIn(true, data?.firstName, data?.lastName);
+                    props.history.push(dashboardRoute);
                 })
-                .catch(() => setMessage("Verification Failed."));
+                .catch(() => setMessage(authMessages.verify.verificationFailed));
         }
     },[]);
 
     return ( 
-        <Grid container spacing={3}>
-            <Grid item xs={12} className="login-dom"> 
-                <h3>
-                    {message} &nbsp;
-                    <Link to='/signin'>
-                        <Button type="submit" variant="outlined"   color="primary">
-                            LOGIN
-                        </Button>
-                    </Link>
-                </h3>
-            </Grid>
-            <Grid item xs={12} className={ ` signup-background-theater-mobile  background-theater image-dom`}>
-                <Grid>
-                    {/* <img src={TheaterMobile}  className=''/> */}
-                </Grid>  
+        <Grid container component="main" className={classes.root}>
+            <CssBaseline />
+            <Grid item xs={false} sm={4} md={7} className={'img-login ' + classes.image} />
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                <div className={'text-align-center ' + classes.paper}>
+                     <Avatar className={classes.avatar}>
+                        <PanoramaSharp />
+                    </Avatar>
+                    <h3>
+                    {message} 
+                    <Grid>
+                        <Link to='/signin' >
+                            <Button type="submit" variant="outlined"   color="primary">
+                                LOGIN
+                            </Button>
+                        </Link>
+                    </Grid>
+                    </h3> 
+                </div>
             </Grid>
         </Grid>
      );
