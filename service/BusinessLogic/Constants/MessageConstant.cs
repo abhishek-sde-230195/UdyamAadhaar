@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BusinessLogic.Constants
 {
-    public static class MessageConstant
+   public static class MessageConstant
     {
         public struct Global
         {
@@ -30,7 +30,7 @@ namespace BusinessLogic.Constants
             public const string SuccessfulLogin = "Sucessfuly logged in";
             public const string AccountActivated = "Account successfuly activated";
             public const string AccountActivationFailed = "Account activation failed";
-            public const string ConfirmationLink = "?Email={0}&token={1}";
+            public const string ConfirmationLink = "?email={0}&token={1}";
             public const string ResetPasswordTemplate = "<p>Click on the below link to reset your password.<br /> <br> <a href='{0}'> Reset Password  </a></p>";
             public const string PasswordResetSubject = "Password Reset";
             public const string PasswordLinkSend = "Password change link send";

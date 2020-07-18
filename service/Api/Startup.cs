@@ -21,6 +21,7 @@ using BusinessLogic.StartupMethods;
 using Microsoft.IdentityModel.Tokens;
 using Data.DBContext;
 using Data.DBTables;
+using BusinessLogic.Constants;
 
 namespace Api
 {
@@ -41,10 +42,9 @@ namespace Api
             //Initialize EfCore With sql server
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                builder =>
-                {
-                    builder.WithOrigins(Configuration["HelperUrls:CorsUrl"])
+                options.AddPolicy(ConfigurationConstant.CorsOrginName,
+                builder => {
+                    builder.WithOrigins(Configuration[ConfigurationConstant.Url.CorsUrl])
                     .AllowAnyHeader()
                     .AllowAnyMethod();
                 });
@@ -52,13 +52,13 @@ namespace Api
 
             services.AddDbContext<ProjectContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("AadharDb"));
+                options.UseNpgsql(Configuration.GetConnectionString(ConfigurationConstant.ConnectionString.AadharDb));
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 5;
+                options.Password.RequireDigit = ConfigurationConstant.User.RequireDigit;
+                options.Password.RequiredLength = ConfigurationConstant.User.RequiredLength;
             }).AddEntityFrameworkStores<ProjectContext>()
                 .AddDefaultTokenProviders();
 
@@ -70,12 +70,12 @@ namespace Api
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
+                   ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = Configuration["AuthSettings:Audience"],
-                    ValidIssuer = Configuration["AuthSettings:Issuer"],
+                    ValidAudience = Configuration[ConfigurationConstant.User.JwtAudience],
+                    ValidIssuer = Configuration[ConfigurationConstant.User.JwtIssuer],
                     RequireExpirationTime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthSettings:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[ConfigurationConstant.User.JwtKey])),
                     ValidateIssuerSigningKey = true
                 };
             });
@@ -89,7 +89,7 @@ namespace Api
         {
             //Serilog.Extensions.Logging.File
             //Add file is extension method from Serilog Package....
-            string filePath = Configuration["LoggerSettings:LogFilePath"];//To-Do Change the string and put it in config files
+            string filePath = Configuration[ConfigurationConstant.Logger.FilePath];//To-Do Change the string and put it in config files
             loggerFactory.AddFile(filePath);
 
             if (env.IsDevelopment())
@@ -104,7 +104,7 @@ namespace Api
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-                        Path.Combine(Configuration["FilePaths:Thumbnail"])),
+                        Path.Combine(Configuration[ConfigurationConstant.Url.ThumbnailUrl])),
                 RequestPath = new PathString("/api")
             });
 
